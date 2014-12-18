@@ -8,6 +8,16 @@ class TestPixelMap < Minitest::Test
     @map = PixelMap.new 4, 4
   end
 
+  def test_pixels
+    @map.clear
+    assert_equal %W(
+      O O O O
+      O O O O
+      O O O O
+      O O O O    
+    ), @map.pixels
+  end
+
   def test_set
     @map.set 2, 2, "J"
     assert_equal "J", @map.pixels[5] 
@@ -37,6 +47,39 @@ class TestPixelMap < Minitest::Test
       B B B B
       B B A A
       B B A O
+    ), @map.pixels
+  end
+  
+  def test_line_horizontal
+    @map.clear
+    @map.line 1, 1, 4, 1, "L"
+    assert_equal %W(
+      L L L L    
+      O O O O
+      O O O O
+      O O O O
+    ), @map.pixels
+  end
+  
+  def test_line_vertical
+    @map.clear
+    @map.line 2, 1, 2, 4, "L"
+    assert_equal %W(
+      O L O O    
+      O L O O
+      O L O O
+      O L O O
+    ), @map.pixels
+  end  
+  
+  def test_line_diagonal
+    @map.clear
+    @map.line 1, 1, 4, 4, "L"
+    assert_equal %W(
+      L O O O    
+      O L O O
+      O O L O
+      O O O L
     ), @map.pixels
   end
         

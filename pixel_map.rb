@@ -22,7 +22,7 @@ class PixelMap
     return if x < 1 || y < 1 || x > @width || y > @height
     source ||= get(x,y)
     target = pixel(x,y)
-    puts "IF (#{x},#{y}:#{target})#{@pixels[target]} === #{source} #{@pixels[target]===source}"
+    # puts "IF (#{x},#{y}:#{target})#{@pixels[target]} === #{source} #{@pixels[target]===source}"
     if @pixels[target] === source
       @pixels[target] = c
   		flood4(x+1,y,c,source)
@@ -31,6 +31,29 @@ class PixelMap
   		flood4(x,y-1,c,source)
     end
   end
+  
+  # beresenham line
+  def line x0, y0, x1, y1, c
+    dx = (x1 - x0).abs
+    sx = x0 < x1 ? 1 : -1
+    dy = (y1 - y0).abs
+    sy = y0 < y1 ? 1 : -1
+    err = (dx > dy ? dx : -dy) / 2
+    
+    loop do
+      set x0, y0, c
+      break if x0 === x1 && y0 === y1
+      e2 = err
+      if e2 > -dx
+        err -= dy
+        x0 += sx
+      end  
+      if e2 < dy
+        err += dx
+        y0 += sy  
+      end
+    end 
+  end 
   
   def clear
     @pixels.fill WHITE
