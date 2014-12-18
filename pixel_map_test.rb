@@ -23,7 +23,14 @@ class TestPixelMap < Minitest::Test
     @map.set 1, 1, "A" 
     @map.set 3, 3, "A"     
     @map.set 3, 4, "A"         
-    @map.set 4, 3, "A"         
+    @map.set 4, 3, "A"    
+    assert_equal %W(
+      A O O O
+      O O O O
+      O O A A
+      O O A O
+    ), @map.pixels
+         
     @map.flood4 2, 2, "B"
     assert_equal %W(
       A B B B

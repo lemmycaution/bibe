@@ -19,11 +19,12 @@ class PixelMap
   end
   
   def flood4 x, y, c, source = nil
+    return if x < 1 || y < 1 || x > @width || y > @height
     source ||= get(x,y)
     target = pixel(x,y)
+    puts "IF (#{x},#{y}:#{target})#{@pixels[target]} === #{source} #{@pixels[target]===source}"
     if @pixels[target] === source
       @pixels[target] = c
-      
   		flood4(x+1,y,c,source)
   		flood4(x-1,y,c,source)
   		flood4(x,y+1,c,source)
@@ -45,6 +46,7 @@ class PixelMap
   def pixel x, y
     # modified version of x + y * width
     # for easy usage of 1,1 coordinates
+    
     (x-1) + (y-1) * @width
   end
   
