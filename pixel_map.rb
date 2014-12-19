@@ -21,6 +21,7 @@ class PixelMap
   def flood4 x, y, c, source = nil
     return if x < 1 || y < 1 || x > @width || y > @height
     source ||= get(x,y)
+    return if source === c # fix for SystemStackError: stack level too deep
     target = pixel(x,y)
     # puts "IF (#{x},#{y}:#{target})#{@pixels[target]} === #{source} #{@pixels[target]===source}"
     if @pixels[target] === source

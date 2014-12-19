@@ -30,6 +30,18 @@ class TestPixelMap < Minitest::Test
   
   def test_flood4
     @map.clear
+    
+    @map.flood4 2, 2, "B"
+    assert_equal %W(
+      B B B B
+      B B B B
+      B B B B
+      B B B B
+    ), @map.pixels
+  end
+  
+  def test_flood4_with_border
+    @map.clear
     @map.set 1, 1, "A" 
     @map.set 3, 3, "A"     
     @map.set 3, 4, "A"         
