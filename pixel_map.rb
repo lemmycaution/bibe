@@ -10,14 +10,20 @@ class PixelMap
     @pixels = Array.new( width * height, WHITE)
   end
   
+  # sets color of a pixel
   def set x, y, color
     @pixels[pixel(x,y)] = color
   end
   
+  # gets color of a pixel
   def get x, y
     @pixels[pixel(x,y)]
   end
   
+  # 4 way stack based flood fill
+  # see http://en.wikipedia.org/wiki/Flood_fill#Stack-based_recursive_implementation_.28Four-way.29
+  
+  # wondering about how can bitwise operations improve this ?!?
   def flood4 x, y, c, source = nil
     return if x < 1 || y < 1 || x > @width || y > @height
     source ||= get(x,y)
@@ -33,7 +39,10 @@ class PixelMap
     end
   end
   
-  # beresenham line
+  # http://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
+  # Implementation forked from Coffee Script port on 
+  # http://rosettacode.org/wiki/Bitmap/Bresenham%27s_line_algorithm#CoffeeScript
+  
   def line x0, y0, x1, y1, c
     dx = (x1 - x0).abs
     sx = x0 < x1 ? 1 : -1
@@ -56,11 +65,12 @@ class PixelMap
     end 
   end 
   
+  # reset pixels array to all WHITE
   def clear
     @pixels.fill WHITE
   end
   
-  # pretty prints pixel array
+  # pretty print pixel array
   def print
     @pixels.each_slice(@height) { |row| puts row.join(",") + "\n" }
   end

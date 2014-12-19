@@ -1,0 +1,87 @@
+#!/usr/bin/env ruby
+
+# Bibe: Basic interactive bitmap editor
+
+require './pixel_map'
+
+module Bibe
+  
+  @map = nil
+  
+  # Create a new M x N image with all pixels coloured white ("O").
+  # Parameters 
+  # - M, Integer, width of the image in pixes
+  # - N, Integer, height of the image in pixes
+  def i m, n
+    puts "WARNING: Map already initialized, run x to terminate current session" unless @map.nil?
+    @map ||= PixelMap.new m, n
+  end
+  
+  # Clears the table, setting all pixels to white ("O").
+  def c
+    raise RuntimeError.new "Map not initialized, try running i(m,n)" if @map.nil?
+    @map.clear
+  end
+  
+  # Colours the pixel (X,Y) with colour C.
+  # Parameters 
+  # - X, Integer, horizontal coordinate of the pixel
+  # - Y, Integer, vertical coordinate of the pixel
+  # - C, String, color to be painted, single letter ex: "O"
+  def l x, y, c
+    raise RuntimeError.new "Map not initialized, try running i(m,n)" if @map.nil?    
+    @map.set x, y, c
+  end
+  
+  # Draw a vertical segment of colour C in column X between rows Y1 and Y2 (inclusive).
+  # Parameters 
+  # - X, Integer, column no
+  # - Y1, Integer, starting row no
+  # - Y2, Integer, ending row no
+  # - C, String, color to be painted, single letter ex: "O"
+  def v x, y1, y2, c
+    ensure_map!
+    @map.line x, y1, x, y2, c
+  end
+  
+  # Draw a horizontal segment of colour C in row Y between columns X1 and X2 (inclusive).
+  # Parameters 
+  # - Y, Integer, row no
+  # - X1, Integer, starting column no
+  # - X2, Integer, ending column no
+  # - C, String, color to be painted, single letter ex: "O"
+  def h y, x1, x2, c
+    ensure_map!
+    @map.line x1, y, x2, y, c
+  end
+  
+  #  Fill the region R with the colour C. R is defined as: Pixel (X,Y) belongs to R. Any other pixel which is the same colour as (X,Y) and shares a common side with any pixel in R also belongs to this region.
+  # Parameters
+  # - X, Integer, horizontal region identifier
+  # - Y, Integer, vertical region identifier
+  # - C, String, color to be painted, single letter ex: "O" 
+  def f x, y, c
+    ensure_map!
+    @map.flood4 x, y, c
+  end
+  
+  # Show the contents of the current image
+  def s
+    ensure_map!
+    @map.print
+  end
+  
+  # Terminate the session
+  def x
+    @map = nil
+  end
+  
+  def ensure_map!
+    raise RuntimeError.new "Map not initialized, try running i(m,n)" if @map.nil?
+  end
+end
+
+require 'irb'
+require 'irb/completion'
+include Bibe
+IRB.start
