@@ -38,3 +38,11 @@ x # destroy map
 
 exit
 ```
+
+## Testing
+
+
+```
+bundle install
+bundle exec ruby pixel_map_test.rb
+```
