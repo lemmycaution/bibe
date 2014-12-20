@@ -1,10 +1,15 @@
+require 'securerandom'
+require 'oj'
+
 class PixelMap
   
+  ATTRIBUTES = %w(width height pixels)
   WHITE = "O"
   
-  attr_reader :pixels
+  attr_reader :name, :pixels, :width, :height
   
   def initialize width, height
+    @name = SecureRandom.uuid
     @width = width
     @height = height
     @pixels = Array.new( width * height, WHITE)
@@ -72,6 +77,34 @@ class PixelMap
     @pixels.each_slice(@height) { |row| puts row.join(",") + "\n" }
   end
   
+  # loads map data from json file
+  def load name
+    @name = name
+    data = Oj.load File.read(name)
+    old_data = as_json
+    
+    ATTRIBUTES.each do |attr|
+      unless data.has_key? attr
+        data = old_data
+        puts "data #{name} cannot be loaded, #{attr} not found in JSON..."
+        break
+      end
+    end
+    
+    @pixels = data['pixels']
+    @width = data['width']
+    @height = data['height']
+  end
+  
+  # saves map data into json file
+  def save
+    File.write @name, Oj.dump(as_json)
+  end
+  
+  def as_json
+    Hash[ ATTRIBUTES.zip ATTRIBUTES.map{ |attr| public_send(attr) } ]
+  end
+  
   private
   
   def pixel x, y
@@ -80,6 +113,5 @@ class PixelMap
     
     (x-1) + (y-1) * @width
   end
-  
   
 end

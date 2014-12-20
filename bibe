@@ -96,6 +96,21 @@ module Bibe
     @map = nil
   end
   
+  # Save map data into json file
+  def save_map
+    @map.save
+  end
+  
+  # Load map data from json file
+  # Parameters
+  # - Filename, String, filename of previously saved json file
+  def load_map filename
+    unless @map
+      @map = PixelMap.new 1,1
+    end
+    @map.load filename
+  end
+  
   def ensure_map!
     raise RuntimeError.new "Map not initialized, try running i(m,n)" if @map.nil?
   end

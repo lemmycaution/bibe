@@ -7,6 +7,10 @@ class TestPixelMap < Minitest::Test
   def setup
     @map = PixelMap.new 4, 4
   end
+  
+  def teardown
+    File.unlink @map.name if File.exists? @map.name
+  end
 
   def test_pixels
     @map.clear
@@ -99,6 +103,26 @@ class TestPixelMap < Minitest::Test
   def test_line_diagonal
     @map.clear
     @map.line 1, 1, 4, 4, "L"
+    assert_equal %W(
+      L O O O    
+      O L O O
+      O O L O
+      O O O L
+    ), @map.pixels
+  end
+  
+  def test_save
+    @map.clear
+    @map.save
+    assert File.exists? @map.name
+  end
+  
+  def test_load
+    @map.clear
+    @map.line 1, 1, 4, 4, "L"
+    @map.save
+    @map.clear
+    @map.load @map.name
     assert_equal %W(
       L O O O    
       O L O O
