@@ -40,6 +40,18 @@ class TestPixelMap < Minitest::Test
     ), @map.pixels
   end
   
+  def test_flood4_same_color
+    @map.clear
+    
+    @map.flood4 2, 2, "O"
+    assert_equal %W(
+      O O O O
+      O O O O
+      O O O O
+      O O O O
+    ), @map.pixels
+  end
+  
   def test_flood4_with_border
     @map.clear
     @map.set 1, 1, "A" 

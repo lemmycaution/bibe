@@ -15,12 +15,14 @@ module Bibe
   def i m, n
     puts "WARNING: Map already initialized, run x to terminate current session" unless @map.nil?
     @map ||= PixelMap.new m, n
+    s
   end
   
   # Clears the table, setting all pixels to white ("O").
   def c
     raise RuntimeError.new "Map not initialized, try running i(m,n)" if @map.nil?
     @map.clear
+    s
   end
   
   # Colours the pixel (X,Y) with colour C.
@@ -31,6 +33,7 @@ module Bibe
   def l x, y, c
     raise RuntimeError.new "Map not initialized, try running i(m,n)" if @map.nil?    
     @map.set x, y, c
+    s
   end
   
   # Draw a vertical segment of colour C in column X between rows Y1 and Y2 (inclusive).
@@ -42,6 +45,7 @@ module Bibe
   def v x, y1, y2, c
     ensure_map!
     @map.line x, y1, x, y2, c
+    s
   end
   
   # Draw a horizontal segment of colour C in row Y between columns X1 and X2 (inclusive).
@@ -53,6 +57,21 @@ module Bibe
   def h y, x1, x2, c
     ensure_map!
     @map.line x1, y, x2, y, c
+    s
+  end
+  
+  # Draw a line of colour C from coordinates X1, Y1 to X2 and Y2 (inclusive).
+  # Parameters 
+  # - Y, Integer, row no
+  # - X1, Integer, starting point x
+  # - Y1, Integer, starting point y  
+  # - X2, Integer, ending point x
+  # - Y2, Integer, ending point y  
+  # - C, String, color to be painted, single letter ex: "O"
+  def d x1, y1, x2, y2, c
+    ensure_map!
+    @map.line x1, y1, x2, y2, c
+    s
   end
   
   #  Fill the region R with the colour C. R is defined as: Pixel (X,Y) belongs to R. Any other pixel which is the same colour as (X,Y) and shares a common side with any pixel in R also belongs to this region.
@@ -63,12 +82,13 @@ module Bibe
   def f x, y, c
     ensure_map!
     @map.flood4 x, y, c
+    s
   end
   
   # Show the contents of the current image
   def s
     ensure_map!
-    @map.print
+    @map.show
   end
   
   # Terminate the session

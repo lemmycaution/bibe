@@ -24,19 +24,16 @@ class PixelMap
   # see http://en.wikipedia.org/wiki/Flood_fill#Stack-based_recursive_implementation_.28Four-way.29
   
   # wondering about how can bitwise operations improve this ?!?
-  def flood4 x, y, c, source = nil
-    return if x < 1 || y < 1 || x > @width || y > @height
-    source ||= get(x,y)
-    return if source === c 
-    target = pixel(x,y)
+  def flood4 x, y, new_color, old_color = nil
+    color = get(x,y)
+    old_color ||= color
+    return if x < 1 || y < 1 || x > @width || y > @height || color == new_color || color != old_color
 
-    if @pixels[target] === source
-      @pixels[target] = c
-  		flood4(x+1,y,c,source)
-  		flood4(x-1,y,c,source)
-  		flood4(x,y+1,c,source)
-  		flood4(x,y-1,c,source)
-    end
+    set x, y, new_color
+		flood4 x+1, y, new_color, old_color
+		flood4 x-1, y, new_color, old_color
+		flood4 x, y+1, new_color, old_color
+		flood4 x, y-1, new_color, old_color
   end
   
   # http://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
@@ -71,7 +68,7 @@ class PixelMap
   end
   
   # pretty print pixel array
-  def print
+  def show
     @pixels.each_slice(@height) { |row| puts row.join(",") + "\n" }
   end
   
