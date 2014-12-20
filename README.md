@@ -6,6 +6,8 @@ Challange: https://gist.github.com/soulnafein/8ee4e60def4e5468df2f
 
 ## Usage
 
+For complete api doc please have a look into bibe file 
+
 rub `bibe` to activate irb session, then
 
 ```
